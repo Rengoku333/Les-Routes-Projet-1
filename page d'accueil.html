@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoadTech Maroc - Dimensionnement des Chaussées</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a75ff; /* Bleu clair */
+            --secondary: #e63946; /* Rouge */
+            --light: #f8f9fa; /* Blanc cassé */
+            --dark: #212529; /* Presque noir */
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/1600/900'); /* Remplacer par une image de route */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.25;
+            z-index: -1;
+        }
+        
+        .header {
+            background-color: rgba(26, 117, 255, 0.95); /* Bleu clair transparent */
+            padding: 25px 0;
+            color: white;
+            border-bottom: 4px solid var(--secondary);
+        }
+        
+        .title-main {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .title-main span {
+            color: var(--secondary);
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .welcome-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .welcome-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            height: 100%;
+            border-top: 5px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .step-title {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-start {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 8px rgba(230, 57, 70, 0.3);
+        }
+        
+        .btn-start:hover {
+            background-color: #d32f2f; /* Rouge plus foncé */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(230, 57, 70, 0.4);
+            color: white;
+        }
+        
+        /* Effet de flottement des bulles */
+        .bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(26, 117, 255, 0.2); /* Bulles bleu clair */
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: rise 15s infinite ease-in;
+        }
+        
+        .bubble:nth-child(2n) {
+            background-color: rgba(230, 57, 70, 0.2); /* Alternance avec bulles rouges */
+        }
+        
+        .bubble:nth-child(1) {
+            width: 40px;
+            height: 40px;
+            left: 10%;
+            animation-duration: 8s;
+        }
+        
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            left: 20%;
+            animation-duration: 5s;
+            animation-delay: 1s;
+        }
+        
+        .bubble:nth-child(3) {
+            width: 50px;
+            height: 50px;
+            left: 35%;
+            animation-duration: 10s;
+            animation-delay: 2s;
+        }
+        
+        .bubble:nth-child(4) {
+            width: 80px;
+            height: 80px;
+            left: 50%;
+            animation-duration: 7s;
+            animation-delay: 0s;
+        }
+        
+        .bubble:nth-child(5) {
+            width: 35px;
+            height: 35px;
+            left: 55%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+        }
+        
+        .bubble:nth-child(6) {
+            width: 45px;
+            height: 45px;
+            left: 65%;
+            animation-duration: 8s;
+            animation-delay: 3s;
+        }
+        
+        .bubble:nth-child(7) {
+            width: 25px;
+            height: 25px;
+            left: 75%;
+            animation-duration: 7s;
+            animation-delay: 2s;
+        }
+        
+        .bubble:nth-child(8) {
+            width: 80px;
+            height: 80px;
+            left: 80%;
+            animation-duration: 12s;
+            animation-delay: 2s;
+        }
+        
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+            100% {
+                bottom: 1080px;
+                transform: translateX(-200px);
+            }
+        }
+        
+        .footer {
+            background-color: rgba(26, 117, 255, 0.95); /* Bleu clair transparent */
+            color: white;
+            padding: 15px 0;
+            margin-top: 3rem;
+        }
+        
+        /* Ajout pour titre de bienvenue en rouge */
+        .welcome-title {
+            color: var(--secondary);
+        }
+    </style>
+<!-- Ajoutez votre CSS ici -->
+<style>
+.bg-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/Rout.jpeg');
+    background-size: cover;
+    background-position: center;
+    opacity: 1;
+    z-index: -1;
+}
+</style>
+</head>
+<body>
+    <!-- Image de fond -->
+    <div class="bg-image"></div>
+    
+    <!-- Effet bulles -->
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+    
+    <!-- Entête -->
+    <header class="header">
+        <div class="container text-center">
+            <h1 class="title-main">Road<span>Tech</span> Maroc</h1>
+            <p class="lead">La solution moderne pour le dimensionnement des chaussées</p>
+        </div>
+    </header>
+    
+    <!-- Contenu principal -->
+    <main class="container py-5">
+        <div class="welcome-card text-center mb-5">
+            <h2 class="mb-3 welcome-title">Bienvenue sur RoadTech Maroc</h2>
+            <p class="lead">Votre outil interactif pour le dimensionnement des chaussées selon <strong>le Catalogue des Structures Types de Chaussées Neuves (CSTCN)</strong> du Maroc</p>
+            <p>Concevez vos infrastructures routières avec précision et fiabilité grâce à notre application intuitive</p>
+        </div>
+        
+        <div class="row g-4 mb-5">
+            <!-- Étape 1 -->
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Détermination du TPL</h3>
+                    <p><strong>Détails :</strong></p>
+                    <ul>
+                        <li>Vérification des <strong>hypothèses</strong></li>
+                        <li>Calcul de <strong>NPL</strong></li>
+                        <li>Déduction du <strong>TPL</strong></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Étape 2 -->
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Détermination de la portance</h3>
+                    <p><strong>Détails :</strong></p>
+                    <ul>
+                        <li>Détermination de la portance <strong>Sti</strong> par l'une des méthodes suivantes: <strong>CBR</strong>, <strong>EV2</strong>, <strong>Conditions de climat et de drainage</strong></li>
+                        <li>Détermination de la portance <strong>Pj</strong> à l'aide du <strong>TPL</strong></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Étape 3 -->
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Détermination des épaisseurs et des matériaux</h3>
+                    <p><strong>Détails :</strong></p>
+                    <ul>
+                        <li>Dimensionnement complet des couches selon le <strong>CSTCN</strong></li>
+                        <li>Sélection des <strong>matériaux</strong> appropriés et des <strong>épaisseurs</strong> convenables</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center">
+            <a href="Etape 1.html" class="btn btn-start">Commençons</a>
+        </div>
+    </main>
+    
+    <!-- Pied de page -->
+    <footer class="footer text-center">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 RoadTech Maroc - Tous droits réservés</p>
+        </div>
+    </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

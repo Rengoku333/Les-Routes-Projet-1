@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoadTech Maroc - Étape 1: Calcul du TPL</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a75ff; /* Bleu clair */
+            --secondary: #e63946; /* Rouge */
+            --light: #f8f9fa; /* Blanc cassé */
+            --dark: #212529; /* Presque noir */
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('images/Rout.jpeg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.25;
+            z-index: -1;
+        }
+        
+        .header {
+            background-color: rgba(26, 117, 255, 0.95); /* Bleu clair transparent */
+            padding: 15px 0;
+            color: white;
+            border-bottom: 4px solid var(--secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .title-main {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .title-main span {
+            color: var(--secondary);
+        }
+        
+        .step-title {
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .content-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-title {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .btn-next {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 8px rgba(230, 57, 70, 0.3);
+        }
+        
+        .btn-next:hover {
+            background-color: #d32f2f; /* Rouge plus foncé */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(230, 57, 70, 0.4);
+            color: white;
+        }
+        
+        .result-box {
+            background-color: #e8f4ff;
+            border-left: 5px solid var(--primary);
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 5px;
+        }
+        
+        /* Masquer les sections qui ne sont pas actuellement actives */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Image de fond -->
+    <div class="bg-image"></div>
+    
+    <!-- Entête -->
+    <header class="header">
+        <h2 class="step-title">Étape 1: Calcul du TPL</h2>
+        <h1 class="title-main">Road<span>Tech</span> Maroc</h1>
+    </header>
+    
+    <!-- Contenu principal -->
+    <main class="container py-4">
+        <div class="content-card">
+            <!-- Section 1: Vérification des hypothèses -->
+            <div id="section-hypotheses" class="form-section">
+                <h3 class="card-title">Vérification des hypothèses du catalogue</h3>
+                <div class="mb-4">
+                    <p>Veuillez répondre aux questions suivantes pour vérifier si les hypothèses du catalogue CSTCN sont respectées:</p>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">1. Le taux d'accroissement des poids lourds est-il égal à 4% ?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tauxAccroissement" id="tauxOui" value="oui">
+                        <label class="form-check-label" for="tauxOui">Oui</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tauxAccroissement" id="tauxNon" value="non">
+                        <label class="form-check-label" for="tauxNon">Non</label>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">2. Le trafic global est-il équilibré dans les deux sens de circulation ?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="traficEquilibre" id="traficOui" value="oui">
+                        <label class="form-check-label" for="traficOui">Oui</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="traficEquilibre" id="traficNon" value="non">
+                        <label class="form-check-label" for="traficNon">Non</label>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">3. Quelle durée de vie souhaitez-vous considérer ?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="dureeVie" id="dureeCourte" value="courte">
+                        <label class="form-check-label" for="dureeCourte">Durée de vie courte: 10 ans (généralement pour les forts trafics)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="dureeVie" id="dureeLongue" value="longue">
+                        <label class="form-check-label" for="dureeLongue">Durée de vie longue: 15 à 20 ans</label>
+                    </div>
+                </div>
+                
+                <button id="verifierHypotheses" class="btn btn-primary">Vérifier les hypothèses</button>
+            </div>
+            
+            <!-- Section 2: Nombre de phases -->
+            <div id="section-phases" class="form-section hidden">
+                <h3 class="card-title">Nombre de phases de calcul</h3>
+                <p>Indiquez le nombre de phases pour lesquelles vous souhaitez calculer le NPL:</p>
+                <div class="mb-3">
+                    <label for="nombrePhases" class="form-label">Nombre de phases:</label>
+                    <input type="number" class="form-control" id="nombrePhases" min="1" max="10" value="1">
+                </div>
+                <button id="validerPhases" class="btn btn-primary">Valider</button>
+            </div>
+            
+            <!-- Section 3A: Calcul NPL (Hypothèses vérifiées) -->
+            <div id="section-npl-verifie" class="form-section hidden">
+                <h3 class="card-title">Calcul du NPL</h3>
+                <p>Veuillez choisir la méthode de calcul du NPL:</p>
+                
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="methodeNPL" id="methodeDirecte" value="directe">
+                        <label class="form-check-label" for="methodeDirecte">Entrer directement le NPL</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="methodeNPL" id="methodeCalcul" value="calcul">
+                        <label class="form-check-label" for="methodeCalcul">Calculer NPL par rapport à une date de référence</label>
+                    </div>
+                </div>
+                
+                <!-- Sous-section pour entrer directement NPL -->
+                <div id="subsection-npl-direct" class="hidden">
+                    <div class="mb-3">
+                        <label for="nplDirect" class="form-label">Nombre de poids lourds par jour (NPL):</label>
+                        <input type="number" class="form-control" id="nplDirect" min="1" step="1">
+                    </div>
+                    <button id="calculerTPLDirect" class="btn btn-primary">Calculer TPL</button>
+                </div>
+                
+                <!-- Sous-section pour calculer NPL par rapport à une date de référence -->
+                <div id="subsection-npl-calcul" class="hidden">
+                    <div class="mb-3">
+                        <label for="anneeReference" class="form-label">Année de référence:</label>
+                        <input type="number" class="form-control" id="anneeReference" min="1990" max="2050">
+                    </div>
+                    <div class="mb-3">
+                        <label for="anneeMiseEnService" class="form-label">Année de mise en service:</label>
+                        <input type="number" class="form-control" id="anneeMiseEnService" min="1990" max="2050">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tauxAccroissementCalc" class="form-label">Taux d'accroissement (%):</label>
+                        <input type="number" class="form-control" id="tauxAccroissementCalc" min="0" max="20" step="0.1" value="4">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nplReference" class="form-label">NPL de l'année de référence:</label>
+                        <input type="number" class="form-control" id="nplReference" min="1" step="1">
+                    </div>
+                    <button id="calculerNPL" class="btn btn-primary">Calculer NPL et TPL</button>
+                </div>
+            </div>
+            
+            <!-- Section 3B: Calcul NPL (Hypothèses non vérifiées) -->
+            <div id="section-npl-non-verifie" class="form-section hidden">
+                <h3 class="card-title">Calcul du NPL (Hypothèses non vérifiées)</h3>
+                <!-- Les champs pour calculer NPL seront identiques à la section 3A -->
+                <!-- Après le calcul du NPL, on passera aux paramètres supplémentaires -->
+            </div>
+            
+            <!-- Section 4: Paramètres supplémentaires (C1, C2, etc.) pour hypothèses non vérifiées -->
+            <div id="section-parametres" class="form-section hidden">
+                <h3 class="card-title">Paramètres pour le calcul de NE</h3>
+                
+                <!-- Sous-section pour C1 -->
+                <div class="mb-4">
+                    <h4>Calcul de C1</h4>
+                    <div class="mb-3">
+                        <label for="largeurChaussee" class="form-label">Largeur de la chaussée (m):</label>
+                        <input type="number" class="form-control" id="largeurChaussee" min="0" step="0.1">
+                    </div>
+                    <button id="calculerC1" class="btn btn-sm btn-primary">Calculer C1</button>
+                    <div id="resultatC1" class="result-box hidden">
+                        <p>Valeur de C1: <span id="valeurC1">-</span></p>
+                    </div>
+                </div>
+                
+                <!-- Sous-section pour C2 -->
+                <div class="mb-4">
+                    <h4>Calcul de C2</h4>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="methodeC2" id="methodeC2Direct" value="direct">
+                            <label class="form-check-label" for="methodeC2Direct">Entrer directement le CAM</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="methodeC2" id="methodeC2Calcul" value="calcul">
+                            <label class="form-check-label" for="methodeC2Calcul">Calculer C2 selon le modèle du poids lourd</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Sous-sous-section pour entrer CAM directement -->
+                    <div id="subsection-cam-direct" class="hidden">
+                        <div class="mb-3">
+                            <label for="camDirect" class="form-label">Valeur du CAM (C2):</label>
+                            <input type="number" class="form-control" id="camDirect" min="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <!-- Sous-sous-section pour calculer C2 selon modèle -->
+                    <div id="subsection-c2-modele" class="hidden">
+                        <div class="mb-3">
+                            <label class="form-label">Modèle du poids lourd:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="modelePL" id="modeleSimple" value="simple">
+                                <label class="form-check-label" for="modeleSimple">Simple (3 essieux)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="modelePL" id="modeleTandem" value="tandem">
+                                <label class="form-check-label" for="modeleTandem">Tandem (4 essieux)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="modelePL" id="modeleTridem" value="tridem">
+                                <label class="form-check-label" for="modeleTridem">Tridem (5 essieux)</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Champs pour entrer les essieux selon le modèle sélectionné -->
+                        <div id="champs-essieux" class="hidden">
+                            <!-- Ces champs seront générés dynamiquement selon le modèle -->
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Type de chaussée:</label>
+                            <select class="form-select" id="typeChaussee">
+                                <option value="">Sélectionnez...</option>
+                                <option value="souple-neuve">Souple - Neuve</option>
+                                <option value="souple-renforcement">Souple - Renforcement</option>
+                                <option value="rigide-neuve">Rigide - Neuve</option>
+                                <option value="rigide-renforcement">Rigide - Renforcement</option>
+                                <option value="semirigide-neuve">Semi-rigide - Neuve</option>
+                                <option value="semirigide-renforcement">Semi-rigide - Renforcement</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="alphaValue" class="form-label">Valeur de Alpha:</label>
+                            <input type="number" class="form-control" id="alphaValue" min="0" step="0.01">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="kValue" class="form-label">Valeur de K:</label>
+                            <input type="number" class="form-control" id="kValue" min="0" step="0.01">
+                        </div>
+                        
+                        <button id="calculerC2" class="btn btn-sm btn-primary">Calculer C2</button>
+                    </div>
+                    
+                    <div id="resultatC2" class="result-box hidden">
+                        <p>Valeur de C2: <span id="valeurC2">-</span></p>
+                    </div>
+                </div>
+                
+                <!-- Sous-section pour C3 -->
+                <div class="mb-4">
+                    <h4>Calcul de C3</h4>
+                    <p>Ce calcul utilise le taux d'accroissement et la durée de vie déjà entrés.</p>
+                    <button id="calculerC3" class="btn btn-sm btn-primary">Calculer C3</button>
+                    <div id="resultatC3" class="result-box hidden">
+                        <p>Valeur de C3: <span id="valeurC3">-</span></p>
+                    </div>
+                </div>
+                
+                <!-- Sous-section pour C4 -->
+                <div class="mb-4">
+                    <h4>Saisie de C4</h4>
+                    <div class="mb-3">
+                        <label for="c4Value" class="form-label">Valeur de C4:</label>
+                        <input type="number" class="form-control" id="c4Value" min="0" step="0.01">
+                    </div>
+                </div>
+                
+                <!-- Sous-section pour N4 -->
+                <div class="mb-4">
+                    <h4>Calcul de N4</h4>
+                    <button id="calculerN4" class="btn btn-sm btn-primary">Calculer N4</button>
+                    <div id="resultatN4" class="result-box hidden">
+                        <p>Valeur de N4: <span id="valeurN4">-</span></p>
+                    </div>
+                </div>
+                
+                <!-- Sous-section pour CVC -->
+                <div class="mb-4">
+                    <h4>Saisie de CVC</h4>
+                    <div class="mb-3">
+                        <label for="cvcValue" class="form-label">Valeur de CVC:</label>
+                        <input type="number" class="form-control" id="cvcValue" min="0" step="0.01">
+                    </div>
+                </div>
+                
+                <button id="calculerNE" class="btn btn-primary">Calculer NE et TPL</button>
+            </div>
+            
+            <!-- Section des résultats -->
+            <div id="section-resultats" class="form-section hidden">
+                <h3 class="card-title">Résultats du calcul</h3>
+                
+                <div id="resultat-phases" class="mb-4">
+                    <!-- Les résultats de chaque phase seront affichés ici -->
+                </div>
+                
+                <div class="result-box">
+                    <h4>Résultat final</h4>
+                    <p id="resultat-npl-total">NPL total: <span>-</span></p>
+                    <p id="resultat-tpl-final">TPL: <span>-</span></p>
+                </div>
+                
+                <a href="etape2.html" class="btn btn-next">Passer à l'étape 2</a>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // Ce script permettra de gérer la navigation entre les sections et les calculs
+        document.addEventListener('DOMContentLoaded', function() {
+            // Références aux sections
+            const sectionHypotheses = document.getElementById('section-hypotheses');
+            const sectionPhases = document.getElementById('section-phases');
+            const sectionNplVerifie = document.getElementById('section-npl-verifie');
+            const sectionNplNonVerifie = document.getElementById('section-npl-non-verifie');
+            const sectionParametres = document.getElementById('section-parametres');
+            const sectionResultats = document.getElementById('section-resultats');
+            
+            // Références aux sous-sections
+            const subsectionNplDirect = document.getElementById('subsection-npl-direct');
+            const subsectionNplCalcul = document.getElementById('subsection-npl-calcul');
+            const subsectionCamDirect = document.getElementById('subsection-cam-direct');
+            const subsectionC2Modele = document.getElementById('subsection-c2-modele');
+            
+            // Boutons
+            const btnVerifierHypotheses = document.getElementById('verifierHypotheses');
+            const btnValiderPhases = document.getElementById('validerPhases');
+            const btnCalculerNPL = document.getElementById('calculerNPL');
+            const btnCalculerTPLDirect = document.getElementById('calculerTPLDirect');
+            
+            // Variables globales pour stocker les données
+            let hypothesesVerifiees = false;
+            let nombreDePhasesTotal = 1;
+            let phaseActuelle = 1;
+            let resultatsPhases = [];
+            
+            // Fonction pour masquer toutes les sections
+            function masquerToutesSections() {
+                sectionHypotheses.classList.add('hidden');
+                sectionPhases.classList.add('hidden');
+                sectionNplVerifie.classList.add('hidden');
+                sectionNplNonVerifie.classList.add('hidden');
+                sectionParametres.classList.add('hidden');
+                sectionResultats.classList.add('hidden');
+            }
+            
+            // Vérifier les hypothèses
+            btnVerifierHypotheses.addEventListener('click', function() {
+                const tauxAccroissement = document.querySelector('input[name="tauxAccroissement"]:checked');
+                const traficEquilibre = document.querySelector('input[name="traficEquilibre"]:checked');
+                const dureeVie = document.querySelector('input[name="dureeVie"]:checked');
+                
+                if (!tauxAccroissement || !traficEquilibre || !dureeVie) {
+                    alert('Veuillez répondre à toutes les questions.');
+                    return;
+                }
+                
+                // Vérifier si toutes les hypothèses sont respectées
+                hypothesesVerifiees = tauxAccroissement.value === 'oui' && 
+                                    traficEquilibre.value === 'oui';
+                
+                masquerToutesSections();
+                sectionPhases.classList.remove('hidden');
+            });
+            
+            // Valider le nombre de phases
+            btnValiderPhases.addEventListener('click', function() {
+                nombreDePhasesTotal = parseInt(document.getElementById('nombrePhases').value);
+                
+                if (nombreDePhasesTotal < 1) {
+                    alert('Le nombre de phases doit être au moins 1.');
+                    return;
+                }
+                
+                phaseActuelle = 1;
+                resultatsPhases = [];
+                
+                masquerToutesSections();
+                if (hypothesesVerifiees) {
+                    sectionNplVerifie.classList.remove('hidden');
+                } else {
+                    sectionNplNonVerifie.classList.remove('hidden');
+                }
+            });
+            
+            // Gérer les méthodes de calcul NPL
+            document.querySelectorAll('input[name="methodeNPL"]').forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    subsectionNplDirect.classList.add('hidden');
+                    subsectionNplCalcul.classList.add('hidden');
+                    
+                    if (this.value === 'directe') {
+                        subsectionNplDirect.classList.remove('hidden');
+                    } else if (this.value === 'calcul') {
+                        subsectionNplCalcul.classList.remove('hidden');
+                    }
+                });
+            });
+            
+            // Gérer les méthodes de calcul C2
+            document.querySelectorAll('input[name="methodeC2"]').forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    subsectionCamDirect.classList.add('hidden');
+                    subsectionC2Modele.classList.add('hidden');
+                    
+                    if (this.value === 'direct') {
+                        subsectionCamDirect.classList.remove('hidden');
+                    } else if (this.value === 'calcul') {
+                        subsectionC2Modele.classList.remove('hidden');
+                    }
+                });
+            });
+            
+            // Calculer NPL à partir des données de référence
+            btnCalculerNPL.addEventListener('click', function() {
+                const anneeReference = parseInt(document.getElementById('anneeReference').value);
+                const anneeMiseEnService = parseInt(document.getElementById('anneeMiseEnService').value);
+                const tauxAccroissement = parseFloat(document.getElementById('tauxAccroissementCalc').value) / 100;
+                const nplReference = parseInt(document.getElementById('nplReference').value);
+                
+                if (isNaN(anneeReference) || isNaN(anneeMiseEnService) || isNaN(tauxAccroissement) || isNaN(nplReference)) {
+                    alert('Veuillez remplir tous les champs avec des valeurs numériques valides.');
+                    return;
+                }
+                
+                // Calculer NPL
+                const difference = anneeMiseEnService - anneeReference;
+                const npl = Math.round(nplReference * Math.pow(1 + tauxAccroissement, difference));
+                
+                // Déterminer TPL (à implémenter selon le tableau)
+                const tpl = determinerTPL(npl);
+                
+                // Stocker les résultats de cette phase
+                resultatsPhases.push({
+                    phase: phaseActuelle,
+                    npl: npl,
+                    tpl: tpl
+                });
+                
+                // Passer à la phase suivante ou afficher les résultats
+                phaseActuelle++;
+                if (phaseActuelle <= nombreDePhasesTotal) {
+                    // Réinitialiser les champs pour la phase suivante
+                    document.getElementById('anneeReference').value = '';
+                    document.getElementById('anneeMiseEnService').value = '';
+                    document.getElementById('nplReference').value = '';
+                    alert(`Phase ${phaseActuelle-1} terminée. Passons à la phase ${phaseActuelle}.`);
+                } else {
+                    afficherResultats();
+                }
+            });
+            
+            // Calculer TPL directement
+            btnCalculerTPLDirect.addEventListener('click', function() {
+                const npl = parseInt(document.getElementById('nplDirect').value);
+                
+                if (isNaN(npl)) {
+                    alert('Veuillez entrer un NPL valide.');
+                    return;
+                }
+                
+                // Déterminer TPL (à implémenter selon le tableau)
+                const tpl = determinerTPL(npl);
+                
+                // Stocker les résultats de cette phase
+                resultatsPhases.push({
+                    phase: phaseActuelle,
+                    npl: npl,
+                    tpl: tpl
+                });
+                
+                // Passer à la phase suivante ou afficher les résultats
+                phaseActuelle++;
+                if (phaseActuelle <= nombreDePhasesTotal) {
+                    // Réinitialiser le champ pour la phase suivante
+                    document.getElementById('nplDirect').value = '';
+                    alert(`Phase ${phaseActuelle-1} terminée. Passons à la phase ${phaseActuelle}.`);
+                } else {
+                    afficherResultats();
+                }
+            });
+            
+            // Fonction pour déterminer TPL à partir de NPL (selon le tableau 1 ou 7)
+            function determinerTPL(npl) {
+                // À implémenter selon les tables du catalogue
+                if (npl < 10) return 'T1';
+                else if (npl < 25) return 'T2';
+                else if (npl < 50) return 'T3';
+                else if (npl < 150) return 'T4';
+                else if (npl < 300) return 'T5';
+                else return 'T5+';
+                
+                // Note: Ces valeurs sont fictives, à remplacer par les vraies valeurs du tableau
+            }
+            
+            // Fonction pour afficher les résultats de toutes les phases
+            
+        function afficherResultats() {
+            masquerToutesSections();
+            sectionResultats.classList.remove('hidden');
+            
+            const resultatPhasesDiv = document.getElementById('resultat-phases');
+            resultatPhasesDiv.innerHTML = '';
+            
+            let nplTotal = 0;
+            
+            // Afficher chaque phase
+            resultatsPhases.forEach(function(phase) {
+                nplTotal += phase.npl;
+                
+                const phaseDiv = document.createElement('div');
+                phaseDiv.className = 'mb-3 p-3 border rounded';
+                phaseDiv.innerHTML = `
+                    <h5>Phase ${phase.phase}</h5>
+                    <p>NPL: ${phase.npl}</p>
+                    <p>TPL: ${phase.tpl}</p>
+                `;
+                
+                resultatPhasesDiv.appendChild(phaseDiv);
+            });
+            
+            // Calculer le TPL final
+            const tplFinal = determinerTPL(nplTotal);
+            
+            // Afficher les résultats finaux
+            document.querySelector('#resultat-npl-total span').textContent = nplTotal;
+            document.querySelector('#resultat-tpl-final span').textContent = tplFinal;
+        }
+
+        // Gestionnaires pour les calculs de C1, C2, C3, etc.
+        document.getElementById('calculerC1').addEventListener('click', function() {
+            const largeurChaussee = parseFloat(document.getElementById('largeurChaussee').value);
+            
+            if (isNaN(largeurChaussee)) {
+                alert('Veuillez entrer une largeur de chaussée valide.');
+                return;
+            }
+            
+            // Calculer C1 en fonction de la largeur de la chaussée
+            let valeurC1;
+            if (largeurChaussee < 5) {
+                valeurC1 = 0.75;
+            } else if (largeurChaussee < 7) {
+                valeurC1 = 0.9;
+            } else {
+                valeurC1 = 1.0;
+            }
+            
+            document.getElementById('valeurC1').textContent = valeurC1;
+            document.getElementById('resultatC1').classList.remove('hidden');
+        });
+
+        // Gestionnaire pour calculer C2 selon le modèle
+        document.getElementById('calculerC2').addEventListener('click', function() {
+            // À implémenter selon les formules du catalogue
+            // C2 dépend du modèle du PL, du type de chaussée, d'alpha et de K
+            const modelePL = document.querySelector('input[name="modelePL"]:checked');
+            const typeChaussee = document.getElementById('typeChaussee').value;
+            const alphaValue = parseFloat(document.getElementById('alphaValue').value);
+            const kValue = parseFloat(document.getElementById('kValue').value);
+            
+            if (!modelePL || !typeChaussee || isNaN(alphaValue) || isNaN(kValue)) {
+                alert('Veuillez remplir tous les champs pour calculer C2.');
+                return;
+            }
+            
+            // Calcul fictif de C2 (à remplacer par le vrai calcul)
+            const valeurC2 = 1.2; // Exemple de valeur
+            
+            document.getElementById('valeurC2').textContent = valeurC2;
+            document.getElementById('resultatC2').classList.remove('hidden');
+        });
+
+        // Gestionnaire pour calculer C3
+        document.getElementById('calculerC3').addEventListener('click', function() {
+            const tauxAccroissement = parseFloat(document.getElementById('tauxAccroissementCalc').value) / 100;
+            const dureeVie = document.querySelector('input[name="dureeVie"]:checked').value;
+            
+            if (isNaN(tauxAccroissement)) {
+                alert('Veuillez entrer un taux d\'accroissement valide.');
+                return;
+            }
+            
+            // Déterminer la durée en années
+            const dureeAnnees = dureeVie === 'courte' ? 10 : 20;
+            
+            // Calculer C3 selon la formule: (1+t)^n - 1 / t
+            const valeurC3 = (Math.pow(1 + tauxAccroissement, dureeAnnees) - 1) / tauxAccroissement;
+            
+            document.getElementById('valeurC3').textContent = valeurC3.toFixed(2);
+            document.getElementById('resultatC3').classList.remove('hidden');
+        });
+
+        // Gestionnaire pour calculer N4
+        document.getElementById('calculerN4').addEventListener('click', function() {
+            const npl = resultatsPhases.reduce((sum, phase) => sum + phase.npl, 0);
+            const c1 = parseFloat(document.getElementById('valeurC1').textContent);
+            const c2 = parseFloat(document.getElementById('valeurC2').textContent);
+            const c3 = parseFloat(document.getElementById('valeurC3').textContent);
+            const c4 = parseFloat(document.getElementById('c4Value').value);
+            
+            if (isNaN(c1) || isNaN(c2) || isNaN(c3) || isNaN(c4)) {
+                alert('Veuillez calculer C1, C2, C3 et entrer C4 avant de calculer N4.');
+                return;
+            }
+            
+            // Calculer N4 selon la formule N4 = 365 * NPL * C1 * C2 * C3 * C4
+            const valeurN4 = 365 * npl * c1 * c2 * c3 * c4;
+            
+            document.getElementById('valeurN4').textContent = Math.round(valeurN4);
+            document.getElementById('resultatN4').classList.remove('hidden');
+        });
+
+        // Gestionnaire pour calculer NE et TPL
+        document.getElementById('calculerNE').addEventListener('click', function() {
+            const n4 = parseFloat(document.getElementById('valeurN4').textContent);
+            const cvc = parseFloat(document.getElementById('cvcValue').value);
+            
+            if (isNaN(n4) || isNaN(cvc)) {
+                alert('Veuillez calculer N4 et entrer CVC avant de calculer NE.');
+                return;
+            }
+            
+            // Calculer NE selon la formule NE = N4 * CVC
+            const ne = n4 * cvc;
+            
+            // Déterminer le TPL en fonction de NE
+            const tpl = determinerTPLSelonNE(ne);
+            
+            // Stocker et afficher les résultats
+            resultatsPhases = [{
+                phase: 1,
+                npl: resultatsPhases.reduce((sum, phase) => sum + phase.npl, 0),
+                tpl: tpl,
+                ne: ne
+            }];
+            
+            afficherResultats();
+        });
+
+        // Fonction pour déterminer TPL à partir de NE
+        function determinerTPLSelonNE(ne) {
+            // À implémenter selon les tables du catalogue
+            if (ne < 500000) return 'T1';
+            else if (ne < 1500000) return 'T2';
+            else if (ne < 4000000) return 'T3';
+            else if (ne < 10000000) return 'T4';
+            else if (ne < 20000000) return 'T5';
+            else return 'T5+';
+            
+            // Note: Ces valeurs sont fictives, à remplacer par les vraies valeurs du tableau
+        }
+
+        // Gestion des modèles de poids lourds
+        document.querySelectorAll('input[name="modelePL"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                const champsEssieux = document.getElementById('champs-essieux');
+                champsEssieux.innerHTML = '';
+                champsEssieux.classList.remove('hidden');
+                
+                let nombreEssieux;
+                if (this.value === 'simple') nombreEssieux = 3;
+                else if (this.value === 'tandem') nombreEssieux = 4;
+                else if (this.value === 'tridem') nombreEssieux = 5;
+                
+                // Générer les champs pour chaque essieu
+                for (let i = 1; i <= nombreEssieux; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'mb-3';
+                    div.innerHTML = `
+                        <label for="essieu${i}" class="form-label">Charge de l'essieu ${i} (tonnes):</label>
+                        <input type="number" class="form-control" id="essieu${i}" min="0" step="0.1">
+                    `;
+                    champsEssieux.appendChild(div);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
